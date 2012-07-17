@@ -1,2 +1,11 @@
-<h1>Users#new</h1>
-<p>Find me in app/views/users/new.html.erb</p>
+<h1>Sign up!</h1>
+<%= form_for @user do |u| %>
+  <%= render 'shared/error_messages' %>
+  <%= u.label :name %>
+  <%= u.text_field :name %>
+  <%= u.label :password %>
+  <%= u.password_field :password %>
+  <%= u.label :password_confirmation %>
+  <%= u.password_field :password_confirmation %>
+  <%= u.submit 'sign up!' %>
+<% end %>

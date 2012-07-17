@@ -1,0 +1,15 @@
+<h1>All Games</h1>
+
+<%= will_paginate %>
+
+<table class="table table-bordered">
+    <thead>
+      <th>Game Name</th>
+      <th>Player 1</th>
+      <th>Player 2</th>
+      <th>Join Game</th>
+    </thead>
+	<%= render @games %>
+</table>
+
+<%= will_paginate %>

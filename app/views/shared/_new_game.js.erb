@@ -1,0 +1,28 @@
+<script type="text/javascript">
+
+function loadScript() {
+
+  $('input[name="opponent"]').text(" Hot Fuzz");
+
+  var $radioOption = $('input[name="opponent"]');
+
+  $radioOption.change(function() {
+    var $radioValue = $('input:radio[name=opponent]:checked').val();
+    if ($radioValue == 'user') {
+      $('#user2_name').removeClass('disabled');
+      $('#user2_name').prop('disabled', false);
+      $('#user2_name').prop('value','');
+    } else if ($radioValue == 'computer') {
+      $('#user2_name').addClass('disabled');
+      $('#user2_name').prop('disabled', true);
+      $('#user2_name').prop('value','computer');
+    } else {
+      $('#user2_name').addClass('disabled');
+      $('#user2_name').prop('disabled', true);
+      $('#user2_name').prop('value','???');
+    }
+  });
+
+}
+window.onload = loadScript;
+</script>

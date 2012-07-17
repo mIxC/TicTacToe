@@ -1,0 +1,72 @@
+<h1><%= @user.name %></h1>
+<div class="row">
+
+  <div class="span8">
+    <h2>Games this player is in:</h2>
+    <table class="table table-bordered">
+    <thead>
+      <th>Game Name</th>
+      <th>Owes Move</th>
+      <th>Player 1</th>
+      <th>Player 2</th>
+      <th>Join Game</th>
+    </thead>
+    <% @games.each do |g| %>
+      <tr>
+        <td><%= link_to g.name, g %></td>
+        <td><%= g.current_user == @user.id && g.outcome.nil? ? 'yes' : '' %></td>
+        <td><%= link_to User.find(g.user1_id).name, User.find(g.user1_id) %></td>
+        <td>
+          <% if g.user2_id %>
+            <%= link_to User.find(g.user2_id).name, User.find(g.user2_id) %>
+          <% else %>
+            no one!
+          <% end %>
+        </td>
+        <td>
+        <% if g.user2_id.nil? && signed_in? && g.user1_id != current_user.id %>
+          <%= link_to ' join game', {:controller => 'games', :action => 'join', :user2_id => current_user.id, :game_id => g.id}, :method => 'post' %>
+        <% end %>
+        </td>
+      </tr>
+    <% end %>
+    </table>
+  </div>
+  <div class="span4">
+    <h2>Stats</h2>
+    <table class="table table-bordered">
+    <tbody>
+      <tr>
+        <td>Games Won</td>
+        <td><%= @gamesWon %></td>
+      </tr>
+      <tr>
+        <td>Games Lost</td>
+        <td><%= @gamesLost %></td>
+      </tr>
+      <tr>
+        <td>Games Tied</td>
+        <td><%= @gamesTied %></td>
+      </tr>
+      <tr>
+        <td>Games Playing</td>
+        <td><%= @gamesPlaying %></td>
+      </tr>
+    </tbody>
+    </table>
+  </div>
+
+</div>
+
+<% if signed_in? && current_user.id != @user.id %>
+  <h3>Create a game with this player!</h3>
+  <br/>
+  <%= form_tag(:controller => 'games', :action => 'create') do %>
+  <%= text_field_tag :name, 'game name here!' %>
+  <%= hidden_field_tag(:opponent, "user") %>
+  <%= hidden_field_tag(:user2_name, @user.name) %>
+  <br/>
+  <%= submit_tag 'make the game!' %>
+<% end %>
+
+<% end %>

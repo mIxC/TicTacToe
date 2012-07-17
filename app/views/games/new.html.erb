@@ -1,2 +1,19 @@
-<h1>Games#new</h1>
-<p>Find me in app/views/games/new.html.erb</p>
+<% content_for :head do %>
+  <%= render :partial => 'shared/new_game.js' %>
+<% end %>
+<h1>Create New Game</h1>
+<%= form_tag(:controller => 'games', :action => 'create') do %>
+  <%= label_tag :name,'game name' %>
+  <%= text_field_tag :name %>
+  <br/>
+  <%= radio_button_tag(:opponent, "undetermined") %>
+  <%= label_tag(:opponent_undetermined, "open game") %>
+  <%= radio_button_tag(:opponent, "user") %>
+  <%= label_tag(:opponent_user, "select opponent") %>
+  <%= radio_button_tag(:opponent, "computer") %>
+  <%= label_tag(:opponent_computer, "play against computer") %>
+
+  <%= label_tag :user2_name,'name of opponent' %>
+  <%= text_field_tag :user2_name, '', :disabled => true %>
+  <%= submit_tag 'make the game' %>
+<% end %>

@@ -1,12 +1,87 @@
 require 'spec_helper'
 
 describe UsersController do
+render_views
 
   describe "GET 'new'" do
     it "should be successful" do
       get 'new'
       response.should be_success
     end
+  end
+
+  describe 'post create' do
+
+    describe 'failure' do
+      before(:each) do
+        @attr = { :name => '', :email => '', :password => '', :password_confirmation => ''}
+      end
+      
+      it 'should not create a user' do
+        lambda do
+          post :create, :user => @attr
+        end.should_not change(User, :count)
+      end
+      
+      it 'should rend the "new" page' do
+        post :create, :user => @attr
+        response.should render_template('new')
+      end
+    end
+
+    describe 'success' do
+      before(:each) do
+          @attr = { :name => 'John Smith', :password => 'hoohum', :password_confirmation => 'hoohum'}
+      end
+      
+      it 'should create a user' do
+          lambda do
+              post :create, :user => @attr
+          end.should change(User, :count).by(1)
+      end
+      
+      it 'should direct to the user show page' do
+          post :create, :user => @attr
+          response.should redirect_to(user_path(assigns(:user)))
+      end
+      
+      it 'should sign the user in' do
+          post :create, :user => @attr
+          controller.should be_signed_in
+      end
+    end
+
+  end
+
+  describe 'GET "index"' do
+    
+    describe 'for users' do
+        before(:each) do
+            @user = Factory(:user)
+            second_user = Factory(:user, :name => 'Bob', :email => 'bvilla@homeimprovement.com')
+            third_user = Factory(:user, :name => 'Tim', :email => 'tallen@homeimprovement.com')
+            @users = [@user, second_user, third_user]
+            30.times do 
+                @users << Factory(:user, :name => Factory.next(:name), :email => Factory.next(:email))
+            end
+        end
+        
+        it 'should be successful' do
+            test_sign_in(@user)
+            get :index
+            response.should be_success
+        end
+        
+        it 'should paginate users' do
+            test_sign_in(@user)
+            get :index
+            response.should have_selector('div.pagination')
+            response.should have_selector('span.disabled', :content => 'Previous')
+            response.should have_selector('a', :href => '/users?escape=false&page=2', :content => '2')
+            response.should have_selector('a', :href => '/users?escape=false&page=2', :content => 'Next')
+        end
+    end
+    
   end
 
 end

@@ -3,6 +3,14 @@ TicTackToe::Application.routes.draw do
   resources :moves
   resources :games
   resources :users
+  resources :sessions, :only => [:new, :create, :destroy]
+
+  match '/game/join',   :to => 'games#join'
+
+  match '/signup',      :to => 'users#new'
+  match '/signin',      :to => 'sessions#new'
+  match '/signout',     :to => 'sessions#destroy'
+  match '/newgame',     :to => 'games#new'
 
   root                  :to => 'pages#home'
 

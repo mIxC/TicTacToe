@@ -1,0 +1,32 @@
+<% content_for :head do %>
+  <%= render :partial => 'shared/gameboard.js' %>
+<% end %>
+<h1><%= @game.name %></h1>
+<div class='row'>
+
+  <div class='span8'>
+    <table class="table table-bordered">
+        <tbody>
+          <tr><td id='pos1'></td><td id='pos2'></td><td id='pos3'></td></tr>
+          <tr><td id='pos4'></td><td id='pos5'></td><td id='pos6'></td></tr>
+          <tr><td id='pos7'></td><td id='pos8'></td><td id='pos9'></td></tr>
+        </tbody>
+    </table>
+  </div>
+
+  <div class='span4'>
+    <h3><%= link_to @user1.name, @user1 %></h3>
+    vs
+    <h3><%= link_to @user2.name, @user2 %></h3>
+    <br/>
+    <% if @game.outcome.nil? %>
+      <h4>game is in progress!</h4>
+      and it is <%= @user1.id == @game.current_user ? @user1.name : @user2.name %>'s turn
+    <% elsif @game.outcome == 0 %>
+      <h4>the game is a draw!</h4>
+    <% elsif @game.outcome > 0 %>
+      <h4><%= @user1.id == @game.outcome ? @user1.name : @user2.name %> won!!!</h4>
+    <% end %>
+  </div>
+
+</div>

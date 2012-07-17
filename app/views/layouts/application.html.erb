@@ -2,13 +2,21 @@
 <html>
 <head>
   <title><%= title %></title>
-  <%= stylesheet_link_tag    "application" %>
+  <%= stylesheet_link_tag    "application", :media => 'all' %>
   <%= javascript_include_tag "application" %>
+  <%= yield :head %>
   <%= csrf_meta_tags %>
 </head>
 <body>
 
-<%= yield %>
+  <%= render 'layouts/header' %>
+  <div class="container">
+    <% flash.each do |key, value| %>
+      <%= content_tag(:div, value, class: "alert alert-#{key}") %>
+    <% end %>
+    <%= yield %>
+    <%= render 'layouts/footer' %>
+  </div>
 
 </body>
 </html>

@@ -2,14 +2,6 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.1.3'
 
-# Bundle edge Rails instead:
-# gem 'rails',     :git => 'git://github.com/rails/rails.git'
-
-gem 'pg'
-
-gem 'thin'
-
-
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -18,26 +10,34 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem 'jquery-rails'
-
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
 # Use unicorn as the web server
-# gem 'unicorn'
+#gem 'unicorn'
+gem 'thin'
+gem 'bootstrap-sass'
+gem 'will_paginate'
 
 # Deploy with Capistrano
-# gem 'capistrano'
+#gem 'capistrano'
 
 # To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
+gem 'ruby-debug19', :require => 'ruby-debug'
+
+gem 'pg'
+gem 'bcrypt-ruby'
+gem 'jquery-rails'
 
 group :test do
   # Pretty printed test output
   gem 'turn', '0.8.2', :require => false
+  gem 'rspec-rails', '2.6.1'
+  gem 'webrat', '0.7.1'
+  gem 'spork', '0.9.0.rc8'
+  gem 'factory_girl_rails', '1.0'
 end
 
 group :development do
-  gem 'rspec-rails'
-  gem 'factory_girl_rails'
+  gem 'rspec-rails', '2.6.1'
+  gem 'annotate', '2.4.0'
+  gem 'faker', '0.3.1'
+  gem 'annotate', '2.4.0'
 end
