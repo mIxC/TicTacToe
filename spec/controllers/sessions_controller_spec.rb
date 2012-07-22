@@ -8,11 +8,6 @@ render_views
       get 'new'
       response.should be_success
     end
-  
-    it 'should have the right title' do
-      get 'new'
-      response.should have_selector('title', :content => 'Sign in')
-    end
   end
 
   describe "POST 'create'" do
@@ -44,11 +39,6 @@ render_views
         post :create, :session => @attr
         response.should render_template('new')
       end
-    
-      it 'should have the right title' do
-        post :create, :session => @attr
-        response.should have_selector('title', :content => 'Sign in')
-      end
       
       it 'should have a flash.now message' do
         post :create, :session => @attr
@@ -59,12 +49,12 @@ render_views
     
     describe "delete 'DESTROY'" do
         
-        it 'should sign a user out' do
-            test_sign_in(Factory(:user))
-            delete :destroy
-            controller.should_not be_signed_in
-            response.should redirect_to(root_path)
-        end
+      it 'should sign a user out' do
+        test_sign_in(Factory(:user))
+        delete :destroy
+        controller.should_not be_signed_in
+        response.should redirect_to(root_path)
+      end
     end
 
     

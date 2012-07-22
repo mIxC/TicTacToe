@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
       sign_in user
       redirect_to user
     else
-      flash.now[:error] = 'sorry, that didnt work out'
+      flash.now[:error] = 'sorry, invalid user or password'
       render 'new'
     end
   end

@@ -4,7 +4,12 @@ class User < ActiveRecord::Base
 
   before_save :create_remember_token
 
-  validates :password, presence: true, length: { minimum: 6 }
+  validates :password, :presence => TRUE, 
+                       :confirmation => TRUE,
+                       :length => { :within => 6..50 }
+  validates :name, :presence => TRUE, 
+                   :length => { :within => 3..50 } ,
+                   :uniqueness => { :case_sensitive => FALSE }                      
 
   has_many :moves, :dependent => :destroy
   

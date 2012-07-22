@@ -14,7 +14,7 @@ render_views
 
     describe 'failure' do
       before(:each) do
-        @attr = { :name => '', :email => '', :password => '', :password_confirmation => ''}
+        @attr = { :name => '', :password => '', :password_confirmation => ''}
       end
       
       it 'should not create a user' do
@@ -23,7 +23,7 @@ render_views
         end.should_not change(User, :count)
       end
       
-      it 'should rend the "new" page' do
+      it 'should render the "new" page' do
         post :create, :user => @attr
         response.should render_template('new')
       end
@@ -54,34 +54,37 @@ render_views
   end
 
   describe 'GET "index"' do
-    
-    describe 'for users' do
-        before(:each) do
-            @user = Factory(:user)
-            second_user = Factory(:user, :name => 'Bob', :email => 'bvilla@homeimprovement.com')
-            third_user = Factory(:user, :name => 'Tim', :email => 'tallen@homeimprovement.com')
-            @users = [@user, second_user, third_user]
-            30.times do 
-                @users << Factory(:user, :name => Factory.next(:name), :email => Factory.next(:email))
-            end
-        end
-        
-        it 'should be successful' do
-            test_sign_in(@user)
-            get :index
-            response.should be_success
-        end
-        
-        it 'should paginate users' do
-            test_sign_in(@user)
-            get :index
-            response.should have_selector('div.pagination')
-            response.should have_selector('span.disabled', :content => 'Previous')
-            response.should have_selector('a', :href => '/users?escape=false&page=2', :content => '2')
-            response.should have_selector('a', :href => '/users?escape=false&page=2', :content => 'Next')
+    before(:each) do
+        @user1 = Factory(:user)
+        @user3 = Factory(:user, :name => 'Bob')
+        @user4 = Factory(:user, :name => 'Tim')
+        @users = [@user1, @user3, @user4]
+        30.times do 
+            @users << Factory(:user, :name => Factory.next(:name))
         end
     end
     
+    it 'should be successful' do
+        get :index
+        response.should be_success
+    end
+    
+    it 'should paginate users' do
+        test_sign_in(@user1)
+        get :index
+        response.should have_selector('div.pagination')
+        response.should have_selector('span.disabled', :content => 'Previous')
+        response.should have_selector('a', :href => '/users?page=2', :content => '2')
+        response.should have_selector('a', :href => '/users?page=2', :content => 'Next')
+    end
+
+    it 'should have an element and link for each user' do
+      get :index
+      @users[0..2].each do |user|
+        response.should have_selector('a', :href => user_path(user), :content => user[:name])
+      end
+    end
+
   end
 
 end

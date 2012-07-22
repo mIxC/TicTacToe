@@ -6,13 +6,20 @@ class GamesController < ApplicationController
     @game = Game.new
   end
 
-  def join
-    @game = Game.find(params[:game_id])
-    @user = User.find(params[:user2_id])
-    if @game && @user
+  def update
+    @game = Game.find_by_id(params[:id])
+    @user = User.find_by_id(params[:user2_id])
+    if @game && @user && @game.user2_id.nil?
       if @game.update_attribute(:user2_id, @user.id)
         redirect_to @game
+      else
+        @games = Game.paginate(:page => params[:page])
+        flash[:error] = 'sorry, something happened'
+        redirect_to :action => :index
       end
+    else
+      flash[:error] = 'sorry, can\'t join'
+      redirect_to :action => :index
     end
   end
 
@@ -47,7 +54,7 @@ class GamesController < ApplicationController
       @game = Game.new(:name => gameName, :user1_id => user1.id, :current_user => user1.id)
       if @game.save
         flash[:success] = "game made! now go get someone to join your game!"
-        redirect_to root_path
+        redirect_to current_user
       end
 
     when 'computer'
@@ -66,7 +73,6 @@ class GamesController < ApplicationController
       end
 
     else
-      puts "was given #{params[:opponent]}"
       flash.now[:error] = 'please make a valid opponent choice!'
       render 'new'
 
@@ -75,10 +81,9 @@ class GamesController < ApplicationController
   end
 
   def show
-    @game = Game.find(params[:id])
-    puts @game.inspect
-    @user1 = User.find(@game.user1_id) if @game.user1_id
-    @user2 = User.find(@game.user2_id) if @game.user2_id
+    @game = Game.find_by_id(params[:id])
+    @user1 = User.find_by_id(@game.user1_id) if @game.user1_id
+    @user2 = User.find_by_id(@game.user2_id) if @game.user2_id
     if @game && @user1 && @user2
       @title = @game.name
       @userMoves = @game.moves.where(:user_id => [@user1.id,@user2.id])

@@ -28,11 +28,9 @@ module GamesHelper
     winning_moves2 = winning_moves_filter(movesB)
     
     if winning_moves1
-      puts winning_moves1
       game.update_attribute(:outcome,game.user1_id)
       winning_moves1
     elsif winning_moves2
-      puts winning_moves2
       game.update_attribute(:outcome,game.user2_id)
       winning_moves2
     elsif no_moves_left?(game)

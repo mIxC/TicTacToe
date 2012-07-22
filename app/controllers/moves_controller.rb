@@ -7,7 +7,6 @@ class MovesController < ApplicationController
   end
 
   def create
-    p params
     move = @game.moves.build(params)
     if move.save
       end_game = check_game_status(@game)
@@ -28,8 +27,8 @@ class MovesController < ApplicationController
   private
 
     def correct_user
-      @game = Game.find(params[:game_id])
-      unless @game && @game.current_user == current_user.id
+      @game = Game.find_by_id(params[:game_id])
+      unless @game && @game.current_user == current_user.id && params[:user_id].to_i == current_user.id.to_i
         flash[:error] = "I'm sorry #{current_user.name}, but I can't let you do that..."
         redirect_to root_path
       end
