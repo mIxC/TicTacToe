@@ -11,12 +11,14 @@
 
   <%= render 'layouts/header' %>
   <div class="container">
+    <div id="realtime_notice"></div>
     <% flash.each do |key, value| %>
       <%= content_tag(:div, value, class: "alert alert-#{key}") %>
     <% end %>
     <%= yield %>
     <%= render 'layouts/footer' %>
   </div>
+<%= render 'shared/realtime_notifications.js' if signed_in? %>
 <%= debug(params) if Rails.env.development? %>
 </body>
 </html>

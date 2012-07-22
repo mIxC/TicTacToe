@@ -17,6 +17,13 @@ class MovesController < ApplicationController
       else
         flash[:success] = 'nice move bro!'
         set_next_player(@game)
+        pubnub.publish({
+          'channel' => @game.current_user.to_s,
+          'message' => { 'type' => 'game_update', 'id' => @game.id.to_s, 'name' => @game.name.to_s },
+          'callback' => lambda do |message|
+             puts(message)
+           end
+        })
       end
     else
       flash[:error] = 'sorry, unable to save that move'

@@ -1,0 +1,40 @@
+<div pub-key="pub-048dc89b-2b8c-481e-9a4f-bb874847c3f6" sub-key="sub-09d4f2ae-d435-11e1-ae47-0b88a5d68c46" ssl="off" origin="pubsub.pubnub.com" id="pubnub"></div>
+<script src="http://cdn.pubnub.com/pubnub-3.1.min.js"></script>
+<script>(function(){
+ 
+    // LISTEN FOR MESSAGES
+    PUBNUB.subscribe({
+        channel    : "<%= current_user.id %>",      // CONNECT TO THIS CHANNEL.
+ 
+        restore    : false,              // STAY CONNECTED, EVEN WHEN BROWSER IS CLOSED
+                                         // OR WHEN PAGE CHANGES.
+ 
+        callback   : function(message) { // RECEIVED A MESSAGE.
+            if (message['type'] == 'game_update') {
+                $('#realtime_notice').append("<div class='alert alert-success'>You're move over at <a href='/games/"+message['id']+"'>"+message['name']+"</a></div>");
+            } else {
+                console.log(message);
+            }
+        },
+ 
+        disconnect : function() {        // LOST CONNECTION.
+            /*
+            alert(
+                "Connection Lost." +
+                "Will auto-reconnect when Online."
+            )
+            //*/
+        },
+ 
+        reconnect  : function() {        // CONNECTION RESTORED.
+            //alert("And we're Back!")
+        },
+ 
+        connect    : function() {        // CONNECTION ESTABLISHED.
+ 
+
+ 
+        }
+    })
+ 
+})();</script>
