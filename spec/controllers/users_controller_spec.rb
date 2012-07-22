@@ -72,16 +72,16 @@ render_views
     it 'should paginate users' do
         test_sign_in(@user1)
         get :index
-        response.should have_selector('div.pagination')
-        response.should have_selector('span.disabled', :content => 'Previous')
-        response.should have_selector('a', :href => '/users?page=2', :content => '2')
-        response.should have_selector('a', :href => '/users?page=2', :content => 'Next')
+        response.body.should have_selector('div.pagination')
+        response.body.should have_selector('span.disabled', :content => 'Previous')
+        response.body.should have_selector('a', :href => '/users?page=2', :content => '2')
+        response.body.should have_selector('a', :href => '/users?page=2', :content => 'Next')
     end
 
     it 'should have an element and link for each user' do
       get :index
       @users[0..2].each do |user|
-        response.should have_selector('a', :href => user_path(user), :content => user[:name])
+        response.body.should have_selector('a', :href => user_path(user), :content => user[:name])
       end
     end
 

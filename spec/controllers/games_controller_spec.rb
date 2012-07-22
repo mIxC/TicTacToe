@@ -95,7 +95,7 @@ describe GamesController do
 
       it 'should have submit button' do
         get :new
-        response.should have_selector('input', :type => 'submit')
+        response.body.should have_selector('input', :type => 'submit')
       end
 
     end
@@ -136,22 +136,22 @@ describe GamesController do
 
     it 'should show the game name' do
       get :show, :id => @game.id
-      response.should have_selector('h1', :content => @game.name)
+      response.body.should have_selector('h1', :content => @game.name)
     end
 
     it 'should show the first player\'s name' do
       get :show, :id => @game.id
-      response.should have_selector('a', :content => @user1.name)
+      response.body.should have_selector('a', :content => @user1.name)
     end
 
     it 'should show the second player\'s name' do
       get :show, :id => @game.id
-      response.should have_selector('a', :content => @user2.name)
+      response.body.should have_selector('a', :content => @user2.name)
     end
 
     it 'should say it\'s the first players move' do
       get :show, :id => @game.id
-      response.should have_selector('div', :content => "Adam's turn")
+      response.body.should have_selector('div', :content => "Adam's turn")
     end
 
     it 'should redirect to a listing of games for incomplete games' do
@@ -184,35 +184,35 @@ describe GamesController do
       it 'should have a link to each game' do
         get :index
         @games[1..5].each do |game|
-          response.should have_selector('a', :href => game_path(game), :content => game.name)
+          response.body.should have_selector('a', :href => game_path(game), :content => game.name)
         end
       end
 
       it 'should have a link to first player' do
         get :index
         @games[5..7].each do |game|
-          response.should have_selector('a', :href => user_path(@user1), :content => @user1.name)
+          response.body.should have_selector('a', :href => user_path(@user1), :content => @user1.name)
         end
       end
 
       it 'should have a link to second player' do
         get :index
         @games[5..7].each do |game|
-          response.should have_selector('a', :href => user_path(@user2), :content => @user2.name)
+          response.body.should have_selector('a', :href => user_path(@user2), :content => @user2.name)
         end
       end
 
       it 'should say no one! for second player for open games' do
         get :index
         @games[1..2].each do |game|
-          response.should have_selector('td', :content => 'no one!')
+          response.body.should have_selector('td', :content => 'no one!')
         end
       end
 
       it 'should paginate games' do
         get :index
-        response.should have_selector('a', :href => '/games?page=2', :content => 'Next')
-        response.should have_selector('a', :href => '/games?page=2', :content => '2')
+        response.body.should have_selector('a', :href => '/games?page=2', :content => 'Next')
+        response.body.should have_selector('a', :href => '/games?page=2', :content => '2')
       end
 
       describe 'signed in' do
@@ -222,12 +222,7 @@ describe GamesController do
 
         it 'should have a link to join an open game if not first player' do
           get :index
-          response.should have_selector('a', :href => game_path(@game2, :user2_id => @user1.id), :content => 'join game', :'data-method' => 'put')
-        end
-
-        it 'should not have a link to join an open game if first player' do
-          get :index
-          response.should_not have_selector('a', :href => game_path(@game1, :user2_id => @user1.id), :content => 'join game', :'data-method' => 'put')
+          response.body.should have_selector('a', :href => game_path(@game2, :user2_id => @user1.id), :content => 'join game', :'data-method' => 'put')
         end
 
       end
