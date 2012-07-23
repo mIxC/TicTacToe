@@ -37,7 +37,7 @@ class Game < ActiveRecord::Base
       user1_id
     end
     if current_user == computer_player.id && outcome.nil?
-      make_computer_move(game)
+      make_computer_move(self)
     end
   end
 
