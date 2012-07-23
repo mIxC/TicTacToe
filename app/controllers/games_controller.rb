@@ -59,8 +59,9 @@ class GamesController < ApplicationController
 
     when 'computer'
       if computer_player
-        @game = Game.new(:name => gameName, :user1_id => user1.id, :user2_id => computer_player.id, :current_user => user1.id)
+        @game = Game.new(:name => gameName, :user1_id => user1.id, :user2_id => computer_player.id, :current_user => computer_player.id)
         if @game.save
+          make_computer_move(@game)
           flash[:success] = "game made between you and the computer!"
           redirect_to @game
         else
