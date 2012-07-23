@@ -80,7 +80,8 @@ module GamesHelper
     # so this is the plan.
     # first we check to see if we can win in the next move
     # if not, then we'll see if we have to block a winning move
-    # and if not, then let's progress towards the most promising path
+    # then we'll look at the next best given move
+    # and if nothing is apparent, then let's progress towards the most promising path
 
     available_moves = [1,2,3,4,5,6,7,8,9] - user_moves - opponent_moves
 
@@ -98,40 +99,69 @@ module GamesHelper
       possible_opp_next_combos << possible_combo
     end
 
-    puts possible_next_combos.inspect
-    puts 'possible_next_combos'
-    puts possible_opp_next_combos.inspect
-    puts 'possible_opp_next_combos'
-
     winning_combination = nil
     possible_next_combos.each {|c| winning_combination ||= winning_moves_filter(c) }
 
     losing_combination = nil
     possible_opp_next_combos.each {|c| losing_combination ||= winning_moves_filter(c) }
-
-    puts winning_combination.inspect
-    puts 'winning_combination'
-    puts losing_combination.inspect
-    puts 'losing_combination'
     
     good_move = winning_moves_filter(available_moves,2)
     okay_move = winning_moves_filter(available_moves,1)
 
     if winning_combination
-      puts 'first'
       (winning_combination - user_moves).first
     elsif losing_combination
-      puts 'second'
       (losing_combination - opponent_moves).first
+    elsif (user_moves + opponent_moves).empty?
+      1
+    elsif (user_moves.count - opponent_moves.count) >= 0
+      strategyX(user_moves,opponent_moves)
     elsif good_move
-      puts 'third'
       (good_move - user_moves).first
     elsif okay_move
-      puts 'fourth'
       (okay_move - user_moves).first
     else
-      puts 'fifth'
       available_moves.sample
+    end
+
+  end
+
+  def strategyX(user_moves,opponent_moves)
+
+    available_moves = [1,2,3,4,5,6,7,8,9] - user_moves - opponent_moves
+    
+    case opponent_moves.count
+
+    when 0
+      1
+    
+    when 1
+      if opponent_moves.include?(5) # A
+        9
+      elsif !(opponent_moves & corners).empty? # B
+        (available_moves & corners).sample
+      elsif !(opponent_moves & edges).empty? # C
+        5
+      end
+
+    when 2
+      if opponent_moves.include?(5) && !(opponent_moves & corners).empty? # A 1
+        (available_moves & corners).sample
+      elsif !(opponent_moves & corners).empty? && !(opponent_moves & edges).empty? # B 1
+        (available_moves & corners).sample
+      elsif !(opponent_moves & edges).empty? && opponent_moves.include?(9)
+        if opponent_moves.include?(2) || opponent_moves.include?(6)
+          7
+        else
+          3
+        end
+      else
+        available_moves.sample
+      end
+        
+    else
+      available_moves.sample
+
     end
 
   end
@@ -140,6 +170,14 @@ module GamesHelper
 
     def winning_combinations
       [[1,2,3],[4,5,6],[7,8,9],[1,5,9],[3,5,7],[1,4,7],[2,5,8],[3,6,9]]
+    end
+
+    def corners
+      [1,3,7,9]
+    end
+
+    def edges
+      [2,4,6,8]
     end
 
 end

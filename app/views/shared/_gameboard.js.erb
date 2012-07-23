@@ -12,9 +12,9 @@ function loadScript() {
 
   <% @userMoves.each do |m| %>
     <% if m.user_id == @user1.id %>
-      $('#pos<%= m.position %>').html('x');
+      $('#pos<%= m.position %>').html('<b>X</b>');
     <% elsif m.user_id == @user2.id %>
-      $('#pos<%= m.position %>').html('o');
+      $('#pos<%= m.position %>').html('<b>O</b>');
     <% else %>
 
     <% end %>
