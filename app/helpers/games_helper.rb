@@ -1,60 +1,10 @@
 module GamesHelper
 
-  def set_next_player(game)
-    if game.user1_id == game.current_user
-      game.update_attribute(:current_user, game.user2_id)
-      game.user2_id
-    elsif game.user2_id == game.current_user
-      game.update_attribute(:current_user, game.user1_id)
-      game.user1_id
-    else
-      return nil
-    end
-    if game.current_user == computer_player.id
-      make_computer_move(game)
-    end
-  end
-
-  def check_game_status(game)
-    movesB = Array.new
-    movesA = Array.new
-
-    game.moves.each do |m|
-      movesA << m.position if m.user_id == game.user1_id
-      movesB << m.position if m.user_id == game.user2_id
-    end
-    
-    winning_moves1 = winning_moves_filter(movesA)
-    winning_moves2 = winning_moves_filter(movesB)
-    
-    if winning_moves1
-      game.update_attribute(:outcome,game.user1_id)
-      winning_moves1
-    elsif winning_moves2
-      game.update_attribute(:outcome,game.user2_id)
-      winning_moves2
-    elsif no_moves_left?(game)
-      game.update_attribute(:outcome,0)
-      'draw'
-    else
-      nil
-    end
-  end
-
   def winning_moves_filter(moves,criteria = 3)
     winning_path = winning_combinations.collect{|wm| moves & wm }
     winning_combination = nil
     winning_path.each {|aa|  winning_combination = aa if aa.length == criteria }
     winning_combination
-  end
-
-  def no_moves_left?(game)
-    allMovesA = Array.new
-    game.moves.each do |m|
-      allMovesA << m.position
-    end
-    allMovesA = allMovesA.uniq.sort
-    allMovesA == [1,2,3,4,5,6,7,8,9]
   end
 
   def computer_player
@@ -73,7 +23,7 @@ module GamesHelper
     end
     desired_move = computer_move(uMoves,oMoves)
     game.moves.create(:position => desired_move, :user_id => computer_player.id)
-    set_next_player(game) unless check_game_status(game)
+    game.set_next_player unless game.check_game_status
   end
 
   def computer_move(user_moves,opponent_moves)

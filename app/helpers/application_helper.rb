@@ -1,4 +1,5 @@
 module ApplicationHelper
+require 'pubnub'
 
   def title
     if @title.nil?
