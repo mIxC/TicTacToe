@@ -55,6 +55,8 @@ class GamesController < ApplicationController
       if @game.save
         flash[:success] = "game made! now go get someone to join your game!"
         redirect_to current_user
+      else
+        render 'new'
       end
 
     when 'computer'
@@ -78,7 +80,7 @@ class GamesController < ApplicationController
       render 'new'
 
     end
-      
+ 
   end
 
   def show

@@ -2,6 +2,7 @@
   <%= render :partial => 'shared/new_game.js' %>
 <% end %>
 <h1>Create New Game</h1>
+<%= render 'shared/error_messages_game' %>
 <%= form_tag(:controller => 'games', :action => 'create') do %>
   <%= label_tag :name,'game name' %>
   <%= text_field_tag :name %>
