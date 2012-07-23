@@ -9,19 +9,19 @@ class MovesController < ApplicationController
   def create
     move = @game.moves.build(params)
     if move.save
-      end_game = check_game_status(@game)
+      end_game = @game.check_game_status
       if end_game == 'draw'
         flash[:success] = 'the game is a draw!!!'
       elsif end_game
         flash[:success] = "the game was won with #{end_game}"
       else
         flash[:success] = 'nice move bro!'
-        set_next_player(@game)
+        @game.set_next_player
         pubnub.publish({
           'channel' => @game.current_user.to_s,
           'message' => { 'type' => 'game_update', 'id' => @game.id.to_s, 'name' => @game.name.to_s },
           'callback' => lambda do |message|
-             puts(message)
+             #puts(message)
            end
         })
       end
