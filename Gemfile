@@ -19,8 +19,6 @@ gem 'will_paginate'
 # Deploy with Capistrano
 #gem 'capistrano'
 
-# To use debugger
-gem 'ruby-debug19', :require => 'ruby-debug'
 
 gem 'pg'
 gem 'bcrypt-ruby'
@@ -33,7 +31,7 @@ group :test do
   gem 'spork', '0.9.0.rc8'
   gem 'factory_girl_rails', '1.0'
   gem 'capybara'
-  gem 'database_cleaner'
+  # To use debugger
 end
 
 group :development do
@@ -42,5 +40,5 @@ group :development do
   gem 'faker', '0.3.1'
   gem 'annotate', '2.4.0'
   gem 'capybara'
-  gem 'database_cleaner'
+  # To use debugger
 end
