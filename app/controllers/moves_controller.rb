@@ -11,18 +11,31 @@ class MovesController < ApplicationController
     if move.save
       end_game = @game.check_game_status
       if end_game == 'draw'
-        flash[:success] = 'the game is a draw!!!'
+        message = {'type'    => 'alert',
+                   'alert'   => 'notice',
+                   'game_id' => @game.id.to_s,
+                   'message' => "The game #{view_context.link_to @game.name, game_path(@game)} was a draw!"}
+        pubnub.publish({'channel' => @game.user1_id.to_s,'message' => message,'callback'=>lambda{|m|}})
+        pubnub.publish({'channel' => @game.user2_id.to_s,'message' => message,'callback'=>lambda{|m|}})
       elsif end_game
-        flash[:success] = "the game was won with #{end_game}"
+        message = {'type'    => 'alert',
+                   'alert'   => 'notice',
+                   'game_id' => @game.id.to_s,
+                   'message' => "The game #{view_context.link_to @game.name, game_path(@game)} was won with #{end_game}"}
+        pubnub.publish({'channel' => @game.user1_id.to_s,'message' => message,'callback'=>lambda{|m|}})
+        pubnub.publish({'channel' => @game.user2_id.to_s,'message' => message,'callback'=>lambda{|m|}})
       else
-        flash[:success] = 'nice move bro!'
+        flash[:success] = 'nice move!'
         @game.set_next_player
         pubnub.publish({
           'channel' => @game.current_user.to_s,
-          'message' => { 'type' => 'game_update', 'id' => @game.id.to_s, 'name' => @game.name.to_s },
-          'callback' => lambda do |message|
-             #puts(message)
-           end
+          'message' => { 'type'    => 'alert',
+                         'alert'   => 'success',
+                         'game_id' => @game.id.to_s,
+                         'message' => "You're move in the game #{view_context.link_to @game.name, game_path(@game)}"},
+                         'callback'=> lambda do |message|
+                            #puts(message)
+                          end
         })
       end
     else

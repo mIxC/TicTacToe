@@ -2,6 +2,12 @@
 <script src="http://cdn.pubnub.com/pubnub-3.1.min.js"></script>
 <script>(function(){
  
+    <% if signed_in? && @game %>
+    var game = "<%= @game.id %>";
+    <% else %>
+    var game = '0';
+    <% end %>
+
     // LISTEN FOR MESSAGES
     PUBNUB.subscribe({
         channel    : "<%= current_user.id %>",      // CONNECT TO THIS CHANNEL.
@@ -10,8 +16,12 @@
                                          // OR WHEN PAGE CHANGES.
  
         callback   : function(message) { // RECEIVED A MESSAGE.
-            if (message['type'] == 'game_update') {
-                $('#realtime_notice').append("<div class='alert alert-success'>You're move over at <a href='/games/"+message['id']+"'>"+message['name']+"</a></div>");
+
+            if (message['type'] == 'alert') {
+                $('#realtime_notice').append("<div class='alert alert-"+message['alert']+"'>"+message['message']+"</div>");
+                if (message['game_id'] == game) {
+                    location.reload(true);
+                }
             } else {
                 console.log(message);
             }
