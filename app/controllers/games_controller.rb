@@ -11,6 +11,16 @@ class GamesController < ApplicationController
     @user = User.find_by_id(params[:user2_id])
     if @game && @user && @game.user2_id.nil?
       if @game.update_attribute(:user2_id, @user.id)
+        pubnub.publish({
+          'channel' => @game.user1_id.to_s,
+          'message' => { 'type'    => 'alert',
+                         'alert'   => 'success',
+                         'game_id' => @game.id.to_s,
+                         'message' => "Someone joined your game! Game #{view_context.link_to @game.name, game_path(@game)}"},
+                         'callback'=> lambda do |message|
+                            #puts(message)
+                          end
+        })
         redirect_to @game
       else
         @games = Game.paginate(:page => params[:page])
@@ -39,6 +49,16 @@ class GamesController < ApplicationController
       if user2
         @game = Game.new(:name => gameName, :user1_id => user1.id, :user2_id => user2.id, :current_user => user1.id)
         if @game.save
+          pubnub.publish({
+            'channel' => @game.user2_id.to_s,
+            'message' => { 'type'    => 'alert',
+                           'alert'   => 'success',
+                           'game_id' => @game.id.to_s,
+                           'message' => "Someone challenged you to a game! Game #{view_context.link_to @game.name, game_path(@game)}"},
+                           'callback'=> lambda do |message|
+                              #puts(message)
+                            end
+          })
           flash[:success] = "game made between you and #{user2.name}!"
           redirect_to @game
         else
