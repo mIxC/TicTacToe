@@ -1,15 +1,12 @@
-<% content_for :head do %>
-  <%= render :partial => 'shared/gameboard.js' %>
-<% end %>
 <h1><%= @game.name %></h1>
 <div class='row'>
 
   <div class='span8'>
     <table class="table table-bordered">
         <tbody>
-          <tr><td id='pos1'><span style='color:white;'>.</span></td><td id='pos2'><span style='color:white;'>.</span></td><td id='pos3'><span style='color:white;'>.</span></td></tr>
-          <tr><td id='pos4'><span style='color:white;'>.</span></td><td id='pos5'><span style='color:white;'>.</span></td><td id='pos6'><span style='color:white;'>.</span></td></tr>
-          <tr><td id='pos7'><span style='color:white;'>.</span></td><td id='pos8'><span style='color:white;'>.</span></td><td id='pos9'><span style='color:white;'>.</span></td></tr>
+          <tr><td id='pos1'><%= position_display(@game)[1] %></td><td id='pos2'><%= position_display(@game)[2] %></td><td id='pos3'><%= position_display(@game)[3] %></td></tr>
+          <tr><td id='pos4'><%= position_display(@game)[4] %></td><td id='pos5'><%= position_display(@game)[5] %></td><td id='pos6'><%= position_display(@game)[6] %></td></tr>
+          <tr><td id='pos7'><%= position_display(@game)[7] %></td><td id='pos8'><%= position_display(@game)[8] %></td><td id='pos9'><%= position_display(@game)[9] %></td></tr>
         </tbody>
     </table>
   </div>
@@ -25,7 +22,7 @@
     <% elsif @game.outcome == 0 %>
       <h4>the game is a draw!</h4>
     <% elsif @game.outcome > 0 %>
-      <h4><%= @user1.id == @game.outcome ? @user1.name : @user2.name %> won!!!</h4>
+      <h4><%= @user1.id == @game.outcome ? @user1.name : @user2.name %> won with <%= @game.check_game_status %>!!!</h4>
     <% end %>
   </div>
 

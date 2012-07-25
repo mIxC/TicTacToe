@@ -7,6 +7,29 @@ module GamesHelper
     winning_combination
   end
 
+  def position_display(game)
+    @pos = Hash.new
+
+    9.times do |p|
+      p += 1
+      if signed_in? && current_user.id == game.current_user && game.outcome.nil?
+        @pos[p] = link_to 'move here', {:controller => 'moves', :action => 'create', :position => p, :user_id => current_user.id, :game_id => game.id}, :method => :post
+      else
+        @pos[p] = '<span class="empty-move">.</span>'.html_safe
+      end
+    end
+
+    game.moves.each do |m|
+      if m.user_id == game.user1_id
+        @pos[m.position] = '<b>X</b>'.html_safe
+      elsif m.user_id == game.user2_id
+        @pos[m.position] = '<b>O</b>'.html_safe
+      end
+    end
+
+    @pos
+  end
+
   def computer_player
     User.find_by_name('computer')
   end
