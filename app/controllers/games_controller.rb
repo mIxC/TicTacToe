@@ -60,6 +60,10 @@ class GamesController < ApplicationController
                             end
           })
           flash[:success] = "game made between you and #{user2.name}!"
+          if user2 == computer_player
+            @game.update_attribute(:current_user, computer_player.id)
+            make_computer_move(@game)
+          end
           redirect_to @game
         else
           flash.now[:error] = "sorry, couldn't create that game"
