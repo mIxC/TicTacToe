@@ -77,9 +77,6 @@ module GamesHelper
 
     losing_combination = nil
     possible_opp_next_combos.each {|c| losing_combination ||= winning_moves_filter(c) }
-    
-    good_move = winning_moves_filter(available_moves,2)
-    okay_move = winning_moves_filter(available_moves,1)
 
     if winning_combination
       (winning_combination - user_moves).first
@@ -88,13 +85,9 @@ module GamesHelper
     elsif (user_moves + opponent_moves).empty?
       1
     elsif (user_moves.count - opponent_moves.count) >= 0
-      strategyX(user_moves,opponent_moves)
-    elsif good_move
-      (good_move - user_moves).first
-    elsif okay_move
-      (okay_move - user_moves).first
+      strategyX(user_moves,opponent_moves) || available_moves.sample
     else
-      available_moves.sample
+      strategyO(user_moves,opponent_moves) || available_moves.sample
     end
 
   end
@@ -102,12 +95,12 @@ module GamesHelper
   def strategyX(user_moves,opponent_moves)
 
     available_moves = [1,2,3,4,5,6,7,8,9] - user_moves - opponent_moves
-    
+
     case opponent_moves.count
 
     when 0
       1
-    
+
     when 1
       if opponent_moves.include?(5) # A
         9
@@ -131,10 +124,57 @@ module GamesHelper
       else
         available_moves.sample
       end
-        
+
     else
       available_moves.sample
 
+    end
+
+  end
+
+  def strategyO(user_moves,opponent_moves)
+
+    available_moves = [1,2,3,4,5,6,7,8,9] - user_moves - opponent_moves
+
+    case opponent_moves.count
+      when 1
+        if opponent_moves.include?(5)
+          (available_moves & corners).sample
+        else
+          5
+        end
+      when 2
+        if opponent_moves.include?(5)
+          (available_moves & corners).sample
+        elsif (opponent_moves & corners).count == 1 && (opponent_moves & edges).count == 1
+          caddy_corners[(opponent_moves & corners).first]
+        elsif (opponent_moves & edges).count == 2
+          borderedCorner = nil
+          corner_borders.each do |c,k|
+            if (opponent_moves & corner_borders[c]).count == 2
+              borderedCorner = c
+            end
+          end
+          if borderedCorner
+            borderedCorner
+          else
+            (available_moves & edges).sample
+          end
+        elsif (opponent_moves & [1,9]).count == 2 || (opponent_moves & [3,7]).count == 2
+          (available_moves & edges).sample
+        else
+          available_moves.sample
+        end
+      when 3
+        singleBorderedCorner = nil
+        corner_borders.each do |k,v|
+          if (opponent_moves & v).count == 1
+            singleBorderedCorner = k
+          end
+        end
+        singleBorderedCorner || (available_moves & edges).sample
+      else
+        available_moves.sample
     end
 
   end
@@ -151,6 +191,14 @@ module GamesHelper
 
     def edges
       [2,4,6,8]
+    end
+
+    def caddy_corners
+      {1=>9,3=>7,9=>1,7=>3}
+    end
+
+    def corner_borders
+      {1=>[2,4],3=>[2,6],7=>[4,8],9=>[6,8]}
     end
 
 end

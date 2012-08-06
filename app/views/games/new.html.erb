@@ -4,17 +4,17 @@
 <h1>Create New Game</h1>
 <%= render 'shared/error_messages_game' %>
 <%= form_tag(:controller => 'games', :action => 'create') do %>
-  <%= label_tag :name,'game name' %>
+  <%= label_tag :name,'game name' %><br/>
   <%= text_field_tag :name %>
   <br/>
-  <%= radio_button_tag(:opponent, "undetermined") %>
-  <%= label_tag(:opponent_undetermined, "open game") %>
-  <%= radio_button_tag(:opponent, "user") %>
-  <%= label_tag(:opponent_user, "select opponent") %>
-  <%= radio_button_tag(:opponent, "computer") %>
-  <%= label_tag(:opponent_computer, "play against computer") %>
-
-  <%= label_tag :user2_name,'name of opponent' %>
+  <%= radio_button_tag(:opponent, "undetermined") %> <%= label_tag(:opponent_undetermined, "open game") %><br/>
+  <%= radio_button_tag(:opponent, "user") %> <%= label_tag(:opponent_user, "select opponent") %><br/>
+  <%= radio_button_tag(:opponent, "computer") %> <%= label_tag(:opponent_computer, "play against computer") %><br/>
+  <div id='turn_options'>
+    <%= radio_button_tag(:turn, "first") %> <%= label_tag(:turn_user, "go first") %><br/>
+    <%= radio_button_tag(:turn, "second") %> <%= label_tag(:turn_computer, "go second") %>
+  </div>
+  <%= label_tag :user2_name,'name of opponent' %><br/>
   <%= text_field_tag :user2_name, '', :disabled => true %>
   <%= submit_tag 'make the game' %>
 <% end %>
