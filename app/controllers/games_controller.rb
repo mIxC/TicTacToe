@@ -60,10 +60,6 @@ class GamesController < ApplicationController
                             end
           })
           flash[:success] = "game made between you and #{user2.name}!"
-          if user2 == computer_player
-            @game.update_attribute(:current_user, computer_player.id)
-            make_computer_move(@game)
-          end
           redirect_to @game
         else
           flash.now[:error] = "sorry, couldn't create that game"
@@ -85,9 +81,19 @@ class GamesController < ApplicationController
 
     when 'computer'
       if computer_player
-        @game = Game.new(:name => gameName, :user1_id => user1.id, :user2_id => computer_player.id, :current_user => computer_player.id)
+        if params[:turn] == 'first'
+          current_id = user1.id
+        else
+          current_id = computer_player.id
+        end
+        @game = Game.new({
+          :name => gameName,
+          :user1_id => user1.id,
+          :user2_id => computer_player.id,
+          :current_user => current_id
+        })
         if @game.save
-          make_computer_move(@game)
+          make_computer_move(@game) if @game.current_user == computer_player.id
           flash[:success] = "game made between you and the computer!"
           redirect_to @game
         else

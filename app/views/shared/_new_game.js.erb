@@ -5,6 +5,8 @@ function loadScript() {
   $('input[name="opponent"]').text(" Hot Fuzz");
 
   var $radioOption = $('input[name="opponent"]');
+  var $chooseTurn  = $('#turn_options')
+  $chooseTurn.slideUp();
 
   $radioOption.change(function() {
     var $radioValue = $('input:radio[name=opponent]:checked').val();
@@ -12,14 +14,17 @@ function loadScript() {
       $('#user2_name').removeClass('disabled');
       $('#user2_name').prop('disabled', false);
       $('#user2_name').prop('value','');
+      $chooseTurn.slideUp();
     } else if ($radioValue == 'computer') {
       $('#user2_name').addClass('disabled');
       $('#user2_name').prop('disabled', true);
       $('#user2_name').prop('value','computer');
+      $chooseTurn.slideDown();
     } else {
       $('#user2_name').addClass('disabled');
       $('#user2_name').prop('disabled', true);
       $('#user2_name').prop('value','???');
+      $chooseTurn.slideUp();
     }
   });
 
