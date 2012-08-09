@@ -2,19 +2,23 @@
   <%= render :partial => 'shared/new_game.js' %>
 <% end %>
 <h1>Create New Game</h1>
-<%= render 'shared/error_messages_game' %>
-<%= form_tag(:controller => 'games', :action => 'create') do %>
-  <%= label_tag :name,'game name' %><br/>
-  <%= text_field_tag :name %>
-  <br/>
-  <%= radio_button_tag(:opponent, "undetermined") %> <%= label_tag(:opponent_undetermined, "open game") %><br/>
-  <%= radio_button_tag(:opponent, "user") %> <%= label_tag(:opponent_user, "select opponent") %><br/>
-  <%= radio_button_tag(:opponent, "computer") %> <%= label_tag(:opponent_computer, "play against computer") %><br/>
-  <div id='turn_options'>
-    <%= radio_button_tag(:turn, "first") %> <%= label_tag(:turn_user, "go first") %><br/>
-    <%= radio_button_tag(:turn, "second") %> <%= label_tag(:turn_computer, "go second") %>
+<div class='row'>
+  <div class='span3' id='centerCreate'>
+    <%= render 'shared/error_messages_game' %>
+    <%= form_tag(:controller => 'games', :action => 'create') do %>
+      <div class='input-prepend'><span class='add-on'>Game Name</span><%= text_field_tag :name, nil, :class => 'span2' %></div>
+      <label class='radio'><%= radio_button_tag(:opponent, "undetermined") %> Open Game Anyone Can Join</label>
+      <label class='radio'><%= radio_button_tag(:opponent, "user") %> Select Opponent</label>
+      <div id='player_selection' class='newGameBlock'>
+        <%= collection_select :user2, :id, User.where('id != ?',current_user.id), :id, :name, {:prompt => 'Select Player'} %>
+      </div>
+      <label class='radio'><%= radio_button_tag(:opponent, "computer") %> Play Computer</label>
+      <div id='turn_options' class='newGameBlock'>
+        <label class='radio'><%= radio_button_tag(:turn, "first") %> Go First</label>
+        <label class='radio'><%= radio_button_tag(:turn, "second") %> Go Second</label>
+      </div>
+      <br/>
+      <%= submit_tag 'make the game', :class => 'btn' %>
+    <% end %>
   </div>
-  <%= label_tag :user2_name,'name of opponent' %><br/>
-  <%= text_field_tag :user2_name, '', :disabled => true %>
-  <%= submit_tag 'make the game' %>
-<% end %>
+</div>

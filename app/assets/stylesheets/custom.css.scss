@@ -104,15 +104,28 @@ footer {
   }
 }
 
-/* label customization */
-label {
-  display: inline;
+/* create game customization */
+
+#centerCreate {
+  margin:0 auto;
+  float:none;
 }
-#turn_options {
+
+.newGameBlock {
   margin-left: 25px;
+  display: none;
 }
+
 /* move position */
 
 .empty-move {
   color: white;
+}
+
+/* home page */
+
+.helloHero {
+  font-weight:900;
+  font-size:100px;
+  line-height: 100%;
 }
