@@ -30,12 +30,12 @@ describe GamesController do
 
         it 'should create a user game' do
           lambda do
-            post :create, :name => 'gameName', :opponent => 'user', :user2_name => @user2.name
+            post :create, :name => 'gameName', :opponent => 'user', :user2 => {:id => @user2.id}
           end.should change(Game, :count).by(1)
         end
 
         it 'should redirect to the game for user games' do
-          post :create, :name => 'gameName', :opponent => 'user', :user2_name => @user2.name
+          post :create, :name => 'gameName', :opponent => 'user', :user2 => {:id => @user2.id}
           response.should redirect_to(game_path(assigns(:game)))
         end
 
@@ -67,7 +67,7 @@ describe GamesController do
 
       it 'should not create a valid opponent game' do
         lambda do
-          post :create, :name => 'gameName', :opponent => 'user', :user2_name => @user2.name
+          post :create, :name => 'gameName', :opponent => 'user', :user2 => {:id => @user2.id}
         end.should_not change(Game, :count)
       end
 

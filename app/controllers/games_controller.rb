@@ -45,7 +45,7 @@ class GamesController < ApplicationController
     case params[:opponent]
 
     when 'user'
-      user2 = User.find_by_name(params[:user2_name])
+      user2 = User.find_by_id(params[:user2][:id])
       if user2
         @game = Game.new(:name => gameName, :user1_id => user1.id, :user2_id => user2.id, :current_user => user1.id)
         if @game.save

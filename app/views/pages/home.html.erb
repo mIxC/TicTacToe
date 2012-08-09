@@ -1,18 +1,16 @@
-<div>
-  <h1>Welcome to Tick Tac Toe!</h1>
-</div>
-<p>Hope you like Tic Tac Toe!</p>
-<div class="row">
-  <div class="span6">
-    <ul>
-      <li>Play against people or the computer</li>
-      <li>Play multiple games at once</li>
-      <li>Join other games</li>
-      <li>Track stats!</li>
-      <li>API coming soon!</li>
-    </ul>
+<div class='row'>
+  <div class='span5 helloHero'>
+      Tic<br/>
+      Tac<br/>
+      Toe<br/>
   </div>
   <div class="span6">
-    To get started go ahead and <%= link_to 'create an account', signup_path %> and <%= link_to 'log in', signin_path %>, then <%= link_to 'create a game!', newgame_path %>. That's it!
+    <h3>Some Fun With X's and O's</h3>
+    <p>This is a simple little TicTacToe game powered by ruby on rails. Some features include being able to play against the computer (that never loses) or other players (and create an open game that anyone can join), get real time notifications when someone joins, finishes, or moves in a game you're in (or challenges you to one), play multiple games at once, and track stats!</p>
+    <p>To get started go ahead and <%= link_to 'create an account', signup_path %> and <%= link_to 'log in', signin_path %>, then <%= link_to 'create a game', newgame_path %> or <%= link_to 'find a game to join', games_path %>! That's it!</p>
+    <blockquote>
+      <p>This is by far the best rendition of tic tac toe I've seen yet. The real time notifications were awesome! I can't wait to tweet about this.</p>
+      <small>Benjamin Franklin</small>
+    </blockquote>
   </div>
 </div>
